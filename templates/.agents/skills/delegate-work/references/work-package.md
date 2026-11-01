@@ -7,9 +7,11 @@ Keep the package short. Include only what materially helps the worker complete t
 ## ROUTE
 
 Choose one:
-- `spark-worker` - tiny deterministic edit when Spark is available;
-- `luna-worker` - normal bounded implementation;
-- `sol-escalation` - harder bounded debugging, investigation or implementation when Astra is the active parent.
+
+- `luna-worker` (`gpt-6-luna`, `high`) - tiny deterministic edits and normal bounded implementation;
+- `sol-escalation` (`gpt-6.1-sol`, `medium`) - harder bounded debugging, investigation or implementation when Astra is the active parent.
+
+Select the named profile or explicitly set its model and reasoning effort with supported runtime controls; a generic worker may inherit the parent's settings.
 
 If Sol is already the active parent, do not use `sol-escalation` merely to recreate the parent. Let Sol handle the harder bounded work directly.
 
@@ -24,6 +26,8 @@ Only the repository and product context needed for this task.
 ## SCOPE
 
 Files, components or behaviour the worker owns.
+
+For parallel edits, assign distinct file ownership and require the worker to preserve changes made by others. Sequence tasks that need the same files or depend on another worker's result.
 
 ## CONSTRAINTS
 
@@ -44,6 +48,7 @@ For tiny reversible edits, a focused inspection or narrow check may be enough. F
 ## RETURN
 
 Ask for a concise handover containing:
+
 1. files changed;
 2. what changed;
 3. meaningful verification and result;
@@ -54,13 +59,15 @@ Ask for a concise handover containing:
 If a worker fails, first decide whether the task was unclear or too broad.
 
 If Astra is the active parent and the package was already clear:
-- Spark -> Luna High;
+
 - Luna High -> Sol Medium;
 - Sol Medium -> return to the Astra parent and consider Astra Medium/High for a genuinely global or consequential problem.
 
 If Sol is the active parent and the package was already clear:
-- Spark -> Luna High or direct Sol handling;
+
 - Luna High -> direct Sol handling;
 - raise Sol reasoning only if the problem genuinely warrants it.
 
 Do not force every task through every tier.
+
+An unavailable model or failed launch is not a reasoning failure. Let the parent handle the task when feasible rather than repeatedly retrying the unavailable worker. Change parent reasoning only if supported; if completion is blocked, report the specific limitation.

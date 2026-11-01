@@ -1,6 +1,6 @@
 name = "luna-worker"
-description = "Default bounded implementation worker."
-model = "gpt-5.6-luna"
+description = "Default worker for tiny deterministic edits and normal bounded implementation."
+model = "gpt-6-luna"
 model_reasoning_effort = "high"
 
 developer_instructions = """
