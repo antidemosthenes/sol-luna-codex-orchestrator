@@ -6,14 +6,7 @@ Keep the package short. Include only what materially helps the worker complete t
 
 ## ROUTE
 
-Choose one:
-
-- `luna-worker` (`gpt-6-luna`, `high`) - tiny deterministic edits and normal bounded implementation;
-- `sol-escalation` (`gpt-6.2-sol`, `medium`) - harder bounded debugging, investigation or implementation when Astra is the active parent.
-
-Select the named profile or explicitly set its model and reasoning effort with supported runtime controls; a generic worker may inherit the parent's settings.
-
-If Sol is already the active parent, do not use `sol-escalation` merely to recreate the parent. Let Sol handle the harder bounded work directly.
+Record the worker selected using the project's routing table and whether the assignment is read-only or permits edits.
 
 ## GOAL
 
@@ -53,21 +46,3 @@ Ask for a concise handover containing:
 2. what changed;
 3. meaningful verification and result;
 4. any remaining risk, assumption or blocker.
-
-## Escalation
-
-If a worker fails, first decide whether the task was unclear or too broad.
-
-If Astra is the active parent and the package was already clear:
-
-- Luna High -> Sol Medium;
-- Sol Medium -> return to the Astra parent and consider Astra Medium/High for a genuinely global or consequential problem.
-
-If Sol is the active parent and the package was already clear:
-
-- Luna High -> direct Sol handling;
-- raise Sol reasoning only if the problem genuinely warrants it.
-
-Do not force every task through every tier.
-
-An unavailable model or failed launch is not a reasoning failure. Let the parent handle the task when feasible rather than repeatedly retrying the unavailable worker. Change parent reasoning only if supported; if completion is blocked, report the specific limitation.

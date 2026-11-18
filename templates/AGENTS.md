@@ -4,53 +4,26 @@ The active parent agent is the orchestrator and final authority.
 
 Use the parent model that fits the task:
 
-- Astra Low is the preferred parent for larger or genuinely agentic work that benefits from planning, decomposition, delegation and review.
+- Astra is the preferred parent for larger tasks that benefit from planning, decomposition, delegation and review. Use the selected Astra effort and apply the same dispatch rules at every supported level.
 - Sol is also a valid parent for smaller or straightforward coding work where delegation overhead may not be worth it.
 
 The parent owns understanding, architecture, worker selection, review, integration and final acceptance.
 
-## Model names
+If you received a bounded assignment as a worker, complete it within the supplied scope and return your evidence to the parent. The dispatch instructions below apply to the parent.
 
-Use these exact model IDs; Low, Medium and High refer to reasoning effort, not model names.
+## Dispatching subagents
 
-| Role | Model ID | Reasoning effort |
+As the parent, look for an independent deliverable when you first scope a multi-part implementation, audit or investigation. When a worker can own that deliverable and you have useful work to do alongside it, **spawn the subagent before starting your portion**. This includes read-only inspections. Keep a single sequential operation or tightly coupled edits with the parent. A handoff can also be useful when it keeps extensive intermediate results out of the parent context.
+
+| Work | Astra parent (`gpt-6.2-astra`, any supported effort) | Sol parent (`gpt-6.2-sol`, use selected effort) |
 |---|---|---|
-| Astra parent | `gpt-6.2-astra` | `low`; `medium` or `high` when justified |
-| Sol parent | `gpt-6.2-sol` | Keep the selected effort unless the task needs more |
-| `luna-worker` | `gpt-6-luna` | `high` |
-| `sol-escalation` under Astra | `gpt-6.2-sol` | `medium` |
+| Routine bounded inspection or implementation worth delegating | Spawn `luna-worker` | Spawn `luna-worker` |
+| Harder bounded investigation or implementation beyond Luna | Spawn `sol-escalation` | Handle directly |
+| Global decisions or integration | Handle directly in Astra at the selected effort | Handle directly, raise effort if justified |
 
-## Parent-aware routing
+Use the `delegate-work` skill to select and brief the worker. If it is missing from the session catalog, read `.agents/skills/delegate-work/SKILL.md` in the active project if present. Prefer the named profile. Otherwise use explicit overrides if the launch tool supports the intended model and effort. Check any advertised model list. Select `gpt-6-luna` with `high` for `luna-worker`, or `gpt-6.2-sol` with `medium` for `sol-escalation`. If overrides require a fresh context, select that mode and include the goal, scope and relevant files in the worker message.
 
-When the active parent is Astra:
-
-- Luna High - tiny deterministic edits and normal bounded implementation.
-- Sol Medium - harder bounded implementation, investigation or debugging when Luna is not enough.
-- Astra Medium/High - exceptional parent-level problems that need materially stronger global reasoning.
-
-When the active parent is Sol:
-
-- handle small or straightforward work directly when delegation would add more overhead than value;
-- use Luna High for tiny edits and bounded implementation when delegation is useful;
-- handle harder bounded work directly in Sol, increasing reasoning only when justified.
-
-Do not spawn a Sol worker merely to recreate an already-active Sol parent.
-
-## Delegation
-
-Under Astra, prefer delegating bounded implementation when it saves context, time or cost. Handle trivial changes directly when a handoff would cost more than the work.
-
-Under Sol, use judgement: delegate when it clearly saves context, time or cost; otherwise handle the work directly.
-
-Use the `delegate-work` skill when packaging coding, debugging or investigation work for a subagent.
-
-Parallelise genuinely independent work when useful. Give writing workers distinct file ownership; sequence changes that need the same files. Workers must preserve changes made by the parent or other workers.
-
-## Model availability
-
-Use the configured worker profile or explicitly select its model and reasoning effort with the runtime's supported controls. Do not assume a generic subagent uses a cheaper model; it may inherit the parent settings.
-
-If a worker model or delegation tool is unavailable, let the active parent handle the work when feasible. Treat an access or launch failure as an availability issue, not evidence that the task needs stronger reasoning. Do not repeatedly retry an unavailable worker.
+If the session cannot select the intended worker, handle that portion locally when feasible. A task label or a model name in the worker message does not select its model. When availability affects the outcome, say which selector was missing or which launch error occurred. Reserve reasoning escalation for difficulty demonstrated by the task.
 
 ## Decision boundaries
 
@@ -81,25 +54,6 @@ Stop when:
 - an external blocker prevents further progress.
 
 A preferred model or reasoning upgrade alone is not a blocker. If the runtime cannot change parent settings, continue when feasible; report a concrete unresolved limitation when it prevents completion.
-
-## Escalation
-
-Before escalating, check whether the task was simply underspecified or too broad.
-
-If Astra is the parent:
-
-- tiny delegated edits or normal bounded implementation -> Luna High;
-- harder bounded debugging / investigation / implementation -> Sol Medium;
-- exceptional global architecture, security-sensitive or unresolved parent-level problem -> Astra Medium/High.
-
-If Sol is the parent:
-
-- small straightforward work -> handle directly;
-- tiny delegated edits or normal delegated implementation -> Luna High;
-- harder work -> handle directly in Sol;
-- exceptional unresolved problem -> raise Sol reasoning only when justified.
-
-Do not blindly retry the same worker after a clearly specified task has demonstrated that it needs stronger reasoning.
 
 ## Context discipline
 

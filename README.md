@@ -6,15 +6,14 @@ Use Astra or Sol as the parent and Luna for bounded work when delegation saves c
 
 ## Model targets
 
-Updated November 17, 2026. These are explicit model IDs, not aliases that automatically track future releases. Low, Medium and High refer to reasoning effort.
+Updated November 17, 2026. The model IDs are pinned to specific releases. The ChatGPT Work picker calls Astra’s lowest effort **Light**. In Codex TOML, write `model_reasoning_effort = "low"`. Likewise, **Extra High** is `xhigh`. Available levels depend on the model and client. [Reasoning levels](https://learn.chatgpt.com/docs/agent-configuration/subagents#choosing-models-and-reasoning) · [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
 
 | Role | Model ID | Reasoning effort | Worker profile |
 |---|---|---|---|
-| Larger / agentic parent | `gpt-6.2-astra` | `low` by default | Select in your Codex client |
+| Larger / agentic parent | `gpt-6.2-astra` | Any supported effort you select | Select in your Codex client |
 | Smaller / straightforward parent | `gpt-6.2-sol` | Keep the selected effort; increase when justified | Select in your Codex client |
 | Tiny edits and normal bounded implementation | `gpt-6-luna` | `high` | `luna-worker` |
 | Harder bounded work under Astra | `gpt-6.2-sol` | `medium` | `sol-escalation` |
-| Exceptional Astra parent reasoning | `gpt-6.2-astra` | `medium` or `high` | Adjust the parent when supported |
 
 See the [Codex model catalog](https://learn.chatgpt.com/docs/models?surface=cli) for model availability and [Codex subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents) for worker setup. Select the parent model in your Codex client. The worker profiles apply to subagents.
 
@@ -32,10 +31,10 @@ These branches document historical configurations and may refer to retired model
 
 ## Parent-aware routing
 
-### When Astra Low is the parent
+### When Astra is the parent
 
 ```text
-Astra Low
+Astra (any supported parent effort)
     |
     |-- trivial work; handoff adds overhead ------> handle directly
     |
@@ -43,7 +42,7 @@ Astra Low
     |
     |-- harder bounded work ----------------------> Sol Medium
     |
-    `-- exceptional parent-level problem --------> Astra Medium/High
+    `-- global decisions and integration --------> handle directly in Astra
 ```
 
 ### When Sol is the parent
@@ -68,7 +67,7 @@ If a worker model or delegation tool is unavailable, the parent handles the work
 
 Copy the contents of `templates/`, including the hidden `.agents` and `.codex` directories, into the root of your project.
 
-Use **Astra Low** as the parent for larger/orchestrated work, or **Sol** as the parent for smaller/straightforward work.
+Choose **Astra** at your preferred effort for larger orchestrated work, or **Sol** for smaller, straightforward work. For example, Astra at `xhigh` dispatches a routine inspection to Luna at `high` and a harder independent investigation to Sol at `medium`.
 
 ```text
 your-repo/
@@ -87,7 +86,26 @@ your-repo/
 
 If your project already has an `AGENTS.md`, merge the orchestration guidance rather than replacing project-specific instructions.
 
-Confirm that your Codex client discovers `luna-worker` and `sol-escalation` and that your account can access their models. Use the named profile, or explicitly request its model and reasoning effort with supported runtime controls. A generic subagent can inherit the parent's settings, which defeats the intended cost saving.
+### Check dispatch after installation
+
+Start a fresh local Codex chat in the **consuming project**. This repository stores the installable files under `templates/`. Ask Codex which project root and AGENTS.md apply, whether `delegate-work` appears in the session skill catalog, and which named profiles or model and effort controls its launch tool exposes. Files on disk establish installation. The session controls establish which workers the parent can request.
+
+If the CLI reports that project-local configuration is disabled because the project is untrusted, check project trust before diagnosing a missing profile. If the launch tool itself is absent, check whether `agents.enabled` is disabled in your effective Codex configuration.
+
+In a project with a root README, try this one-time read-only check:
+
+> Dispatch luna-worker to read the first heading in the root README.md. Wait for its result and report the heading and which worker you requested. If you cannot select it, identify the missing control or the launch error.
+
+Check the worker thread or tool activity for a completed launch and returned result. The heading alone can also be read by the parent. Record the effective model and effort only if the client exposes them. To check Sol separately under Astra, repeat with `sol-escalation`.
+
+Then try ordinary prompts on a project with the relevant code and tests:
+
+| Request | Expected behavior |
+|---|---|
+| Audit the shutdown handler and independently review the confirmation dialog. | With Luna available, the parent dispatches the dialog inspection while it traces process cleanup, then reviews both findings. |
+| Rerun the existing CI suite and report the result. | The parent runs the configured suite once. |
+
+Local Codex can follow an applicable AGENTS.md instruction to delegate. ChatGPT Work has different delegation controls and most intelligence levels require an explicit request. See [subagent availability and triggering](https://learn.chatgpt.com/docs/agent-configuration/subagents#availability).
 
 ### Updating an existing installation
 
@@ -97,7 +115,7 @@ Update any locally pinned parent model to `gpt-6.2-sol` for Sol or `gpt-6.2-astr
 
 ## What each model does
 
-### Astra Low
+### Astra as parent
 
 Use as the parent when the task benefits from planning, decomposition, multi-step coordination, review and integration. Delegate bounded implementation when the handoff has a clear benefit; handle trivial work directly.
 
@@ -116,10 +134,6 @@ Use for tiny deterministic edits and normal bounded implementation once the acti
 When Astra is the parent, use Sol Medium if Luna is not enough for a bounded problem such as harder debugging, investigation, subtle state behaviour or implementation that needs materially more independent reasoning.
 
 If the problem becomes a genuinely global architecture, security or product decision, return it to the active parent instead of silently taking ownership of it.
-
-### Astra Medium/High
-
-Reserve higher Astra reasoning for exceptional parent-level problems where Astra Low is not enough, especially consequential architecture, security-sensitive design, difficult cross-system reasoning or unresolved failures that change the overall approach.
 
 ## Completion and verification
 
@@ -149,7 +163,7 @@ Do not change the existing password login flow.
 Done when the flow works end-to-end and the relevant checks pass.
 ```
 
-You should not need to append orchestration instructions to every prompt.
+In a local Codex project with the templates loaded, the parent checks ordinary multi-part tasks for independent work it can dispatch.
 
 ## Included files
 
@@ -164,7 +178,7 @@ You should not need to append orchestration instructions to every prompt.
 
 1. Keep repository-wide instructions short and durable.
 2. Let the active parent use judgement instead of turning every task into a rigid recipe.
-3. Use Astra Low for larger orchestrated work and Sol for smaller straightforward work.
+3. Use Astra for larger orchestrated work and Sol for smaller straightforward work.
 4. Delegate only when it provides a real benefit.
 5. Keep worker context minimal and sufficient.
 6. Use Luna High for tiny delegated edits and normal bounded implementation.
