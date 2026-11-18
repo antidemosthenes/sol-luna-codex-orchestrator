@@ -15,10 +15,10 @@ Use these exact model IDs; Low, Medium and High refer to reasoning effort, not m
 
 | Role | Model ID | Reasoning effort |
 |---|---|---|
-| Astra parent | `gpt-6-astra` | `low`; `medium` or `high` when justified |
-| Sol parent | `gpt-6.1-sol` | Keep the selected effort unless the task needs more |
+| Astra parent | `gpt-6.2-astra` | `low`; `medium` or `high` when justified |
+| Sol parent | `gpt-6.2-sol` | Keep the selected effort unless the task needs more |
 | `luna-worker` | `gpt-6-luna` | `high` |
-| `sol-escalation` under Astra | `gpt-6.1-sol` | `medium` |
+| `sol-escalation` under Astra | `gpt-6.2-sol` | `medium` |
 
 ## Parent-aware routing
 

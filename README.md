@@ -6,17 +6,17 @@ Use Astra or Sol as the parent and Luna for bounded work when delegation saves c
 
 ## Model targets
 
-Updated November 1, 2026. These are explicit model IDs, not aliases that automatically track future releases. Low, Medium and High refer to reasoning effort.
+Updated November 17, 2026. These are explicit model IDs, not aliases that automatically track future releases. Low, Medium and High refer to reasoning effort.
 
 | Role | Model ID | Reasoning effort | Worker profile |
 |---|---|---|---|
-| Larger / agentic parent | `gpt-6-astra` | `low` by default | Select in your Codex client |
-| Smaller / straightforward parent | `gpt-6.1-sol` | Keep the selected effort; increase when justified | Select in your Codex client |
+| Larger / agentic parent | `gpt-6.2-astra` | `low` by default | Select in your Codex client |
+| Smaller / straightforward parent | `gpt-6.2-sol` | Keep the selected effort; increase when justified | Select in your Codex client |
 | Tiny edits and normal bounded implementation | `gpt-6-luna` | `high` | `luna-worker` |
-| Harder bounded work under Astra | `gpt-6.1-sol` | `medium` | `sol-escalation` |
-| Exceptional Astra parent reasoning | `gpt-6-astra` | `medium` or `high` | Adjust the parent when supported |
+| Harder bounded work under Astra | `gpt-6.2-sol` | `medium` | `sol-escalation` |
+| Exceptional Astra parent reasoning | `gpt-6.2-astra` | `medium` or `high` | Adjust the parent when supported |
 
-The IDs and reasoning settings follow the [official model catalog](https://developers.openai.com/api/docs/models) and [Codex subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents). Parent selection is manual; the worker profiles configure subagents, not the active parent.
+See the [Codex model catalog](https://learn.chatgpt.com/docs/models?surface=cli) for model availability and [Codex subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents) for worker setup. Select the parent model in your Codex client. The worker profiles apply to subagents.
 
 > **The active parent owns the global problem. Delegate bounded work only when it saves context, time or cost.**
 
@@ -93,7 +93,7 @@ Confirm that your Codex client discovers `luna-worker` and `sol-escalation` and 
 
 Merge the updated `AGENTS.md` and replace the `delegate-work` skill and both worker profiles with these versions. Remove the old `.codex/agents/spark-worker.toml` from the target project and remove any custom routing or configuration entries pointing to it. Copying the new template alone will not remove an old installed profile.
 
-Update any locally pinned parent model to `gpt-6.1-sol` for Sol or `gpt-6-astra` for Astra. Keep unrelated project configuration intact.
+Update any locally pinned parent model to `gpt-6.2-sol` for Sol or `gpt-6.2-astra` for Astra. Keep unrelated project configuration intact.
 
 ## What each model does
 

@@ -1,6 +1,6 @@
 name = "sol-escalation"
 description = "Hard bounded debugging, investigation or implementation worker under an Astra parent."
-model = "gpt-6.1-sol"
+model = "gpt-6.2-sol"
 model_reasoning_effort = "medium"
 
 developer_instructions = """

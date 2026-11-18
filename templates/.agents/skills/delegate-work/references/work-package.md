@@ -9,7 +9,7 @@ Keep the package short. Include only what materially helps the worker complete t
 Choose one:
 
 - `luna-worker` (`gpt-6-luna`, `high`) - tiny deterministic edits and normal bounded implementation;
-- `sol-escalation` (`gpt-6.1-sol`, `medium`) - harder bounded debugging, investigation or implementation when Astra is the active parent.
+- `sol-escalation` (`gpt-6.2-sol`, `medium`) - harder bounded debugging, investigation or implementation when Astra is the active parent.
 
 Select the named profile or explicitly set its model and reasoning effort with supported runtime controls; a generic worker may inherit the parent's settings.
 

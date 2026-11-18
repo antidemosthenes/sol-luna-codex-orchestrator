@@ -11,7 +11,7 @@ If Astra is the active parent:
 
 1. Pick the cheapest worker likely to finish the bounded task reliably:
    - `luna-worker`: `gpt-6-luna`, `high` effort, for tiny deterministic edits and normal implementation.
-   - `sol-escalation`: `gpt-6.1-sol`, `medium` effort, for harder bounded debugging, investigation or implementation.
+   - `sol-escalation`: `gpt-6.2-sol`, `medium` effort, for harder bounded debugging, investigation or implementation.
 2. Give the worker one clear outcome and only the context it needs.
 3. Define what completion looks like and what verification is actually useful.
 4. If the worker fails, check task clarity before escalating. Do not loop blindly.
